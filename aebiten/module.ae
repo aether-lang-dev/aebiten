@@ -242,7 +242,7 @@ struct Engine {
 }
 
 game_new(logical_w: int, logical_h: int) -> ptr {
-    e = calloc(1, 256) as *Engine
+    e = heap.new(Engine)
     e.logical_w = logical_w
     e.logical_h = logical_h
     e.screen = core.image_new(logical_w, logical_h)
@@ -497,7 +497,7 @@ present(e: *Engine) {
 // Zero-arg factory for the builder: an engine with defaults and no screen
 // yet (game() supplies the logical size and creates it).
 engine_shell() -> ptr {
-    e = calloc(1, 256) as *Engine
+    e = heap.new(Engine)
     e.update_fn = null
     e.draw_fn = null
     e.update_fn_e = null

@@ -57,7 +57,7 @@ struct Face {
 }
 
 face_new(path: string, size: float) -> ptr {
-    fc = malloc(48) as *Face
+    fc = heap.new(Face)
     fc.f = font.font_load(path)
     fc.size = size
     fc.scale = 0.0
@@ -93,7 +93,7 @@ face_set_line_height(p: ptr, h: float) {
 }
 
 face_free(p: ptr) {
-    free(p)
+    heap.free(p as *Face)
 }
 
 // Advance width of one line (px). Multi-line callers measure per line.

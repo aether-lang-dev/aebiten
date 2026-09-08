@@ -116,7 +116,7 @@ struct GeoM {
 }
 
 geom_new() -> ptr {
-    g = malloc(48) as *GeoM
+    g = heap.new(GeoM)
     g.a = 1.0
     g.b = 0.0
     g.c = 0.0
@@ -126,7 +126,7 @@ geom_new() -> ptr {
     return g as ptr
 }
 
-geom_free(p: ptr) { free(p) }
+geom_free(p: ptr) { heap.free(p as *GeoM) }
 
 geom_reset(p: ptr) {
     g = p as *GeoM
@@ -303,7 +303,7 @@ struct Opts {
 }
 
 opts_new() -> ptr {
-    o = malloc(72) as *Opts
+    o = heap.new(Opts)
     o.cm = null
     o.g = geom_new()
     o.cr = 1.0
@@ -318,7 +318,7 @@ opts_new() -> ptr {
 opts_free(p: ptr) {
     o = p as *Opts
     geom_free(o.g)
-    free(p)
+    heap.free(o)
 }
 
 opts_reset(p: ptr) {
@@ -626,7 +626,7 @@ struct Image {
 
 image_new(w: int, h: int) -> ptr {
     if w <= 0 || h <= 0 { return null }
-    img = malloc(64) as *Image
+    img = heap.new(Image)
     img.pix = calloc(w * h, 4)
     img.stride = w
     img.bufh = h
@@ -642,7 +642,7 @@ image_free(p: ptr) {
     if p == null { return }
     img = p as *Image
     if img.root == null { free(img.pix) }
-    free(p)
+    heap.free(img)
 }
 
 image_w(p: ptr) -> int {
@@ -706,7 +706,7 @@ image_sub(p: ptr, x0: int, y0: int, x1: int, y1: int) -> ptr {
     if y1 > by1 { y1 = by1 }
     if x1 < x0 { x1 = x0 }
     if y1 < y0 { y1 = y0 }
-    sub = malloc(64) as *Image
+    sub = heap.new(Image)
     sub.pix = img.pix
     sub.stride = img.stride
     sub.bufh = img.bufh

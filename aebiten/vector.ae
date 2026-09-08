@@ -158,7 +158,7 @@ struct Path {
 }
 
 path_new() -> ptr {
-    p = malloc(80) as *Path
+    p = heap.new(Path)
     p.cap = 64
     p.pts = malloc(p.cap * 16)
     p.brk = malloc(p.cap)
@@ -175,7 +175,7 @@ path_free(pp: ptr) {
     p = pp as *Path
     free(p.pts)
     free(p.brk)
-    free(pp)
+    heap.free(p)
 }
 
 path_grow(p: *Path) {
