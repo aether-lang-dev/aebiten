@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ae/aebiten/audio.ae — the audio package mapped onto std.audio.
+// aebiten/audio.ae — the audio package mapped onto std.audio.
 //
 // Ebiten shape: a Context (one per game, fixed sample rate) makes Players;
 // players play/pause/rewind/seek and carry a volume. std.audio v1 decodes
@@ -31,28 +31,25 @@ exports (
     player_seek_ms, player_position_ms, player_duration_ms
 )
 
-import std.audio
+import std.audio as audio_std
 import std.fs
 
-// This module is also named `audio` (aebiten.audio), so an unqualified
-// `audio.<name>` that exists in BOTH modules resolves to THIS module —
-// self-recursion. Same-named wrappers therefore call the C externs directly.
-extern aether_audio_is_null_backend() -> int
+// Alias the stdlib so qualified calls cannot resolve back to this module.
 
 // One per game. sample_rate is accepted for API parity; std.audio's device
 // owns the real rate. Returns 1 on success.
 context_new(sample_rate: int) -> int {
-    if audio.open() == true { return 1 }
+    if audio_std.open() == true { return 1 }
     return 0
 }
 
 context_close() {
-    audio.close()
+    audio_std.close()
 }
 
 // 1 when std.audio is running its silent null backend (no sound card path).
 is_null_backend() -> int {
-    if aether_audio_is_null_backend() == 1 { return 1 }
+    if audio_std.is_null_backend() == true { return 1 }
     return 0
 }
 
@@ -60,53 +57,53 @@ is_null_backend() -> int {
 player_from_wav(path: string) -> ptr {
     data, n, err = fs.read_binary(path)
     if err != "" { return null }
-    s, lerr = audio.load_wav(data, n)
+    s, lerr = audio_std.load_wav(data, n)
     if lerr != "" { return null }
     return s
 }
 
 player_free(p: ptr) {
-    if p != null { audio.unload(p) }
+    if p != null { audio_std.unload(p) }
 }
 
 player_play(p: ptr) {
-    if p != null { _ = audio.play(p) }
+    if p != null { _ = audio_std.play(p) }
 }
 
 player_pause(p: ptr) {
-    if p != null { _ = audio.pause(p) }
+    if p != null { _ = audio_std.pause(p) }
 }
 
 player_rewind(p: ptr) {
-    if p != null { _ = audio.seek_ms(p, 0) }
+    if p != null { _ = audio_std.seek_ms(p, 0) }
 }
 
 player_is_playing(p: ptr) -> int {
     if p == null { return 0 }
-    if audio.is_playing(p) == true { return 1 }
+    if audio_std.is_playing(p) == true { return 1 }
     return 0
 }
 
 // Volume is 0.0..1.0 (Ebiten allows >1 amplification; std.audio may clamp).
 player_set_volume(p: ptr, v: float) {
-    if p != null { audio.volume(p, v) }
+    if p != null { audio_std.volume(p, v) }
 }
 
 player_volume(p: ptr) -> float {
     if p == null { return 0.0 }
-    return audio.get_volume(p)
+    return audio_std.get_volume(p)
 }
 
 player_seek_ms(p: ptr, ms: long) {
-    if p != null { _ = audio.seek_ms(p, ms) }
+    if p != null { _ = audio_std.seek_ms(p, ms) }
 }
 
 player_position_ms(p: ptr) -> long {
     if p == null { return 0 }
-    return audio.position_ms(p)
+    return audio_std.position_ms(p)
 }
 
 player_duration_ms(p: ptr) -> long {
     if p == null { return 0 }
-    return audio.duration_ms(p)
+    return audio_std.duration_ms(p)
 }

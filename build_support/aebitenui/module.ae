@@ -90,6 +90,7 @@ builder aebiten_backend(root: string) {
         link_flag("-framework QuartzCore")
         link_flag("-framework CoreText")
         link_flag("-framework ImageIO")
+        link_flag("-framework OpenGL")
     }
     if string.equals(os_name, "windows") == 1 {
         extra_source("${aui}/backend/aether_ui_win32.c")

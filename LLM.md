@@ -6,9 +6,8 @@ This file is what those two don't say. Code wins where they disagree.
 
 ## What this is
 
-**Aebiten** — a 2D game engine in **Aether**, not Go. The repo directory
-is still `ebiten/` and the git remote's upstream is hajimehoshi/ebiten,
-but nothing on `main` is Go. The API lineage is Ebitengine's; the
+**Aebiten** — a 2D game engine in **Aether**, not Go. The checkout is `aebiten/`, with `origin` at
+`aether-lang-dev/aebiten`; nothing on `main` is Go. The API lineage is Ebitengine's; the
 implementation is a from-scratch Aether port whose bottom half
 (GLFW, GPU graphicsdriver, internal/ui, mobile/js — ~80k lines) was
 **never ported**: `aether-ui`'s canvas replaces it.
@@ -22,8 +21,8 @@ The Go original lives on branch **`legacy_golang`** (tracks upstream). It is
 the oracle: settle behaviour questions by reading or running it. Do not
 port line-for-line — the shapes differ deliberately (see README).
 
-`origin` is upstream hajimehoshi/ebiten — **never push to it**. `me` is
-paul-hammant/ebiten-ae; `main` tracks `me/main`.
+`origin` is `aether-lang-dev/aebiten`; `main` tracks `origin/main`.
+Commit and push directly to `main`.
 
 ## Layout
 

@@ -29,14 +29,17 @@ fi
 
 echo "=== Phase 2: snake driver smoke ==="
 LAUNCH=""
-if [ -z "${DISPLAY:-}" ]; then
+HAS_DISPLAY=0
+if [ "$(uname -s)" = Darwin ] || [ -n "${DISPLAY:-}" ]; then
+    HAS_DISPLAY=1
+else
     if command -v xvfb-run > /dev/null 2>&1; then
         LAUNCH="xvfb-run -a -s '-screen 0 800x600x24'"
     else
         echo "  SKIP (no display, no xvfb-run)"
     fi
 fi
-if [ $FAIL -eq 0 ] && { [ -n "${DISPLAY:-}" ] || [ -n "$LAUNCH" ]; }; then
+if [ $FAIL -eq 0 ] && { [ "$HAS_DISPLAY" -eq 1 ] || [ -n "$LAUNCH" ]; }; then
     PORT=9231
     BIN=target/build/examples/snake/bin/snake
     AETHER_UI_TEST_PORT=$PORT eval "$LAUNCH $BIN" > /tmp/ci_ae_snake.log 2>&1 &
@@ -49,6 +52,7 @@ if [ $FAIL -eq 0 ] && { [ -n "${DISPLAY:-}" ] || [ -n "$LAUNCH" ]; }; then
     if [ $UP -eq 1 ]; then
         OK=1
         curl -sf -o /dev/null -X POST "http://127.0.0.1:$PORT/canvas/1/key?name=Right" || OK=0
+        sleep 0.03
         curl -sf -o /dev/null -X POST "http://127.0.0.1:$PORT/canvas/1/keyup?name=Right" || OK=0
         sleep 1
         curl -sf -o /tmp/ci_ae_snake.png "http://127.0.0.1:$PORT/screenshot" || OK=0
