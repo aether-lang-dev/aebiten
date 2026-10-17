@@ -540,7 +540,7 @@ builder game(title_text: string, logical_w: int, logical_h: int) with engine_she
 // Run the game: opens the window, wires input, starts the ~60Hz frame timer,
 // and blocks until the window closes. Register on_update/on_draw first.
 // win_w/win_h size the window; the canvas is the logical size, 1:1.
-run(ep: ptr, title: string, win_w: int, win_h: int) {
+run(ep: @keep ptr, title: string, win_w: int, win_h: int) {
     e = ep as *Engine
     window(title, win_w, win_h) {
         c = ui.canvas_create(lrint(e.logical_w * e.scale), lrint(e.logical_h * e.scale))

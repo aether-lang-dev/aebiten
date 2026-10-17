@@ -73,13 +73,19 @@ Install the released toolchain with the shared, version-pinned installer
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/aether-lang-dev/aeb/main/get.sh \
-  | AE_PIN=0.740.0 AEB_REF=v0.324 sh
+  | AE_PIN=0.823.0 AEB_REF=v0.326 sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-This ensures `ae` 0.740.0 or newer and installs `aeb` v0.324 under
+This ensures `ae` 0.823.0 or newer and installs `aeb` v0.326 under
 `~/.local` (`PREFIX` overrides it), using release binaries where available.
 These bootstrap versions are separate from the project's minimum API floor.
+
+**Note:** aeb v0.326's `bldr` does not compile under Aether 0.818 and later
+(E0902, a borrowed `ptr` captured by a closure). The fix is on aeb's `main`
+(db99a6f) but not yet in a release. Until it is, build aeb from `main`
+(`make install` in an aeb checkout). Verified on 2026-10-17 with ae 0.823.0
+and aeb db99a6f: `./ci.sh` passes on macOS arm64.
 
 ```sh
 aeb all.ae                    # build everything

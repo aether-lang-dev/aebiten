@@ -351,7 +351,7 @@ opts_set_filter(p: ptr, filter_kind: int) {
 
 // Attach a ColorM (colorm_new handle; null clears). Applied to STRAIGHT-alpha
 // colors before the (premultiplied) ColorScale, as in Ebiten's colorm package.
-opts_set_colorm(p: ptr, cm: ptr) {
+opts_set_colorm(p: ptr, cm: @keep ptr) {
     o = p as *Opts
     o.cm = cm
 }
@@ -694,7 +694,7 @@ image_stride(p: ptr) -> int {
 
 // Sub-image over [x0,y0)..(x1,y1) in the image's (root) coordinate space,
 // clamped to the image's bounds. Shares pixels with the root.
-image_sub(p: ptr, x0: int, y0: int, x1: int, y1: int) -> ptr {
+image_sub(p: @keep ptr, x0: int, y0: int, x1: int, y1: int) -> ptr {
     img = p as *Image
     bx0 = img.x0
     by0 = img.y0
@@ -1423,4 +1423,4 @@ tint(_ctx: ptr, r: float, g: float, b: float, a: float) { opts_color_scale(_ctx,
 blend(_ctx: ptr, mode: int) { opts_set_blend(_ctx, mode) }
 linear(_ctx: ptr) { opts_set_filter(_ctx, FILTER_LINEAR) }
 nearest(_ctx: ptr) { opts_set_filter(_ctx, FILTER_NEAREST) }
-color_matrix(_ctx: ptr, cm: ptr) { opts_set_colorm(_ctx, cm) }
+color_matrix(_ctx: ptr, cm: @keep ptr) { opts_set_colorm(_ctx, cm) }

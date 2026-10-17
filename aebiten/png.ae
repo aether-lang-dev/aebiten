@@ -21,7 +21,7 @@
 // files). Output is an aebiten.core image handle (straight RGBA8888).
 //
 // IDAT inflation goes through std.zlib; file reading through std.fs's
-// binary split-accessor pair.
+// read_binary.
 
 exports (
     png_decode, png_load
@@ -163,24 +163,18 @@ png_decode(data: ptr, data_len: int) -> ptr {
         off = off + 12 + clen
     }
 
-    // Inflate. bytes.finish consumes the buffer into a binary-safe string.
-    // (set_length is belt-and-braces since aether 0.633 — finish() now
-    // clamps to capacity, so a direct data() write no longer needs it —
-    // but stating the live length explicitly documents the intent.)
-    bytes.set_length(idat_b, idat_total)
-    idat_s = bytes.finish(idat_b, idat_total)
-    ok = zlib.zlib_try_inflate(idat_s, idat_total)
-    if ok != 1 {
+    // Inflate. std.zlib takes the concatenated IDAT as a bounded byte[] view
+    // of the buffer and hands back an owned, length-aware string.
+    raw_s, raw_len, ierr = zlib.inflate((idat as byte[])[0..idat_total])
+    bytes.free(idat_b)
+    if ierr != "" {
         if plte != null { free(plte) }
         if trns != null { free(trns) }
         return null
     }
-    raw_len = zlib.zlib_get_inflate_length()
-    raw_s = zlib.zlib_get_inflate_bytes()
     raw_b = bytes.new(raw_len)
     _ = bytes.copy_from_string(raw_b, 0, raw_s, raw_len)
     raw = bytes.data(raw_b)
-    zlib.zlib_release_inflate()
     stride = w * channels
     need = (stride + 1) * h
     if raw_len < need {
@@ -280,12 +274,14 @@ png_decode(data: ptr, data_len: int) -> ptr {
 
 // Load a PNG file into a new core image; null on read/decode failure.
 png_load(path: string) -> ptr {
-    if fs.fs_try_read_binary(path) != 1 { return null }
-    n = fs.fs_get_read_binary_length()
-    data_s = fs.fs_get_read_binary()
+    // fs.read_binary hands back an owned, length-aware copy. The split
+    // accessor (fs_get_read_binary) is declared `-> string`, so since 0.818
+    // binding its result copies it as a C string and stops at the first NUL
+    // (asks/fs-get-read-binary-truncates-at-nul.md).
+    data_s, n, err = fs.read_binary(path)
+    if err != "" { return null }
     db = bytes.new(n)
     _ = bytes.copy_from_string(db, 0, data_s, n)
-    fs.fs_release_read_binary()
     data = bytes.data(db)
     img = png_decode(data, n)
     bytes.free(db)

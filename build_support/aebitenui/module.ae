@@ -70,6 +70,11 @@ builder aebiten_backend(root: string) {
         extra_source("${aui}/backend/aether_ui_system_extras.c")
         extra_source("${aui}/backend/aether_ui_sni.c")
         link_flag("$(pkg-config --cflags gtk4)")
+        // aether-ui's GTK4 backend calls epoxy_gl* (gpuview), and gtk4.pc
+        // names neither epoxy's headers nor its library: link it, as
+        // aether-ui's own aetherui builder does.
+        link_flag("$(pkg-config --cflags epoxy)")
+        link_flag("$(pkg-config --libs epoxy)")
         link_flag("$(pkg-config --libs gtk4)")
     }
     if string.equals(os_name, "freebsd") == 1 {
@@ -78,6 +83,11 @@ builder aebiten_backend(root: string) {
         extra_source("${aui}/backend/aether_ui_system_extras.c")
         extra_source("${aui}/backend/aether_ui_sni.c")
         link_flag("$(pkg-config --cflags gtk4)")
+        // aether-ui's GTK4 backend calls epoxy_gl* (gpuview), and gtk4.pc
+        // names neither epoxy's headers nor its library: link it, as
+        // aether-ui's own aetherui builder does.
+        link_flag("$(pkg-config --cflags epoxy)")
+        link_flag("$(pkg-config --libs epoxy)")
         link_flag("$(pkg-config --libs gtk4)")
     }
     if string.equals(os_name, "darwin") == 1 {

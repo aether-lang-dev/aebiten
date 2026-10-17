@@ -149,8 +149,10 @@ debug_font_new() -> ptr {
 }
 
 // DebugPrintAt: draw str onto dst with the 6x16 font, top-left at (ox, oy).
-// Newlines wrap. `font` is from debug_font_new().
-debug_print_at(font: ptr, dst: ptr, str: string, ox: int, oy: int) {
+// Newlines wrap. `font` is from debug_font_new(). It is `@keep` because each
+// glyph is a core.image_sub view that holds the font as its root (the view is
+// freed before the call returns, but the ownership check cannot see that).
+debug_print_at(font: @keep ptr, dst: ptr, str: string, ox: int, oy: int) {
     if font == null { return }
     o = core.opts_new()
     g = core.opts_geom(o)
@@ -197,7 +199,7 @@ line_len(str: string, from: int, n: int) -> int {
 // Scaled multi-line text from the debug font. (ox, oy) anchors the first
 // line; align positions each line about ox (left edge / center / right
 // edge). Line height is 16*scale, advance 6*scale.
-debug_print_scaled(font: ptr, dst: ptr, str: string, ox: float, oy: float,
+debug_print_scaled(font: @keep ptr, dst: ptr, str: string, ox: float, oy: float,
                    scale: float, align: int) {
     if font == null { return }
     o = core.opts_new()

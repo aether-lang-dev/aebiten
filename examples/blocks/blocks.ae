@@ -283,7 +283,7 @@ field_end_flush(a: *App) -> int {
 // ─── drawing helpers ─────────────────────────────────────────────────────────
 
 // One block sprite from the 70x10 sheet; cm = optional ColorM (null = none).
-draw_block(a: *App, dst: ptr, block: int, x: int, y: int, cm: ptr) {
+draw_block(a: *App, dst: ptr, block: int, x: int, y: int, cm: @keep ptr) {
     if block == 0 { return }
     sx = (block - 1) * BLOCK
     sprite = core.image_sub(a.blocks_img, sx, 0, sx + BLOCK, BLOCK)
