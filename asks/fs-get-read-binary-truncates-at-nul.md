@@ -1,4 +1,4 @@
-# `fs.fs_get_read_binary()` is cut at the first NUL once bound to a local (Aether 0.818.0 to 0.823.0)
+# `fs.fs_get_read_binary()` is cut at the first NUL once bound to a local (Aether 0.818.0 to 0.824.0)
 
 Found bringing aebiten to 0.823.0: `png.png_load` returned null for every
 PNG, because the file bytes it read stopped after the 8-byte signature.
@@ -20,7 +20,7 @@ main() {
 }
 ```
 
-0.817.0 prints `n=3743 byte12=73`, and 0.823.0 prints `n=3743 byte12=0`.
+0.817.0 prints `n=3743 byte12=73`, and 0.823.0 and 0.824.0 print `n=3743 byte12=0`.
 
 ## Why
 

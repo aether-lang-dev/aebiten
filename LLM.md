@@ -45,8 +45,8 @@ Commit and push directly to `main`.
   load-bearing (input release semantics; `set_scale`).
 - **Toolchain must be post-0.578** (aether#1733: `std.mem` scalar accessors
   codegen-inlined). Earlier toolchains make the pixel loops ~200x slower.
-  Verified green on **0.823.0** (2026-10-17), with aeb built from `main`
-  (db99a6f): v0.326's `bldr` predates 0.818's `@keep ptr` rule. The old stale-`~/.aether/bin`
+  Verified green on **0.824.0** (2026-10-18), with aeb v0.327 (the first
+  release whose `bldr` follows 0.818's `@keep ptr` rule; v0.326's does not compile). The old stale-`~/.aether/bin`
   PATH shadow is gone; `/usr/local/bin` is the installed toolchain, and
   `../aether/build` holds whatever that sibling last compiled — the two
   drift, so check `ae --version` before trusting a perf number.
