@@ -270,12 +270,12 @@ screen_of(ep: ptr) -> ptr {
     return e.screen
 }
 
-on_update(ep: ptr, cb: fn) {
+on_update(ep: ptr, cb: @keep fn) {
     e = ep as *Engine
     e.update_fn = cb
 }
 
-on_draw(ep: ptr, cb: fn) {
+on_draw(ep: ptr, cb: @keep fn) {
     e = ep as *Engine
     e.draw_fn = cb
 }
@@ -512,12 +512,12 @@ engine_shell() -> ptr {
 
 window_scale(_ctx: ptr, s: float) { set_scale(_ctx, s) }
 
-update(_ctx: ptr, cb: fn) {
+update(_ctx: ptr, cb: @keep fn) {
     e = _ctx as *Engine
     e.update_fn_e = cb
 }
 
-draw(_ctx: ptr, cb: fn) {
+draw(_ctx: ptr, cb: @keep fn) {
     e = _ctx as *Engine
     e.draw_fn_e = cb
 }

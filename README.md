@@ -73,18 +73,20 @@ Install the released toolchain with the shared, version-pinned installer
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/aether-lang-dev/aeb/main/get.sh \
-  | AE_PIN=0.824.0 AEB_REF=v0.327 sh
+  | AE_PIN=0.841.0 AEB_REF=v0.335 sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-This ensures `ae` 0.824.0 or newer and installs `aeb` v0.327 under
+This ensures `ae` 0.841.0 or newer and installs `aeb` v0.335 under
 `~/.local` (`PREFIX` overrides it), using release binaries where available.
 These bootstrap versions are separate from the project's minimum API floor.
 
-aeb v0.327 is the first release whose `bldr` compiles under Aether 0.818 and
-later (v0.326's captured a borrowed `ptr` in a closure, E0902). Verified on
-2026-10-18 with ae 0.824.0 and aeb v0.327, both built from their tags:
-`./ci.sh` passes on macOS arm64, Linux arm64 and Linux x86_64.
+aeb v0.327 was the first release whose `bldr` compiles under Aether 0.818 and
+later; v0.333 carries the `@keep` declarations the 0.836-0.840 ownership rules
+need (its own floor is 0.840.0), so v0.327 no longer builds on 0.841. v0.335 is
+the newest release (selaenium is on v0.334, servirtium-vcr on v0.335). Verified
+on 2026-10-23 with ae 0.841.0 and aeb v0.335: `./ci.sh` passes on macOS arm64
+and Linux arm64.
 
 ```sh
 aeb all.ae                    # build everything
