@@ -45,7 +45,8 @@ Commit and push directly to `main`.
   load-bearing (input release semantics; `set_scale`).
 - **Toolchain must be post-0.578** (aether#1733: `std.mem` scalar accessors
   codegen-inlined). Earlier toolchains make the pixel loops ~200x slower.
-  Verified green on **0.931.0** (2026-11-20, Linux x86_64) with aeb v0.347, no
+  Verified green on **0.933.0** (2026-11-21, Linux x86_64, aeb v0.349) and on
+  **0.931.0** (2026-11-20) with aeb v0.347, no
   source change (v0.335 and older do not install on 0.914.0 or later: E0202); and on
   **0.841.0** (2026-10-23), with aeb v0.335 (v0.333 and later
   carry the 0.836-0.840 `@keep` rules; v0.327 predates them). 0.841 needed `@keep`
