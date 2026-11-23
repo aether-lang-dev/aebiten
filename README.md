@@ -73,11 +73,11 @@ Install the released toolchain with the shared, version-pinned installer
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/aether-lang-dev/aeb/main/get.sh \
-  | AE_PIN=0.936.0 AEB_REF=v0.347 sh
+  | AE_PIN=0.939.0 AEB_REF=v0.347 sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-This ensures `ae` 0.936.0 or newer and installs `aeb` v0.347 under
+This ensures `ae` 0.939.0 or newer and installs `aeb` v0.347 under
 `~/.local` (`PREFIX` overrides it), using release binaries where available.
 These bootstrap versions are separate from the project's minimum API floor.
 
@@ -86,7 +86,7 @@ later; v0.333 carries the `@keep` declarations the 0.836-0.840 ownership rules
 need (its own floor is 0.840.0), so v0.327 no longer builds on 0.841. Aether
 0.914.0 and later refuse a `ptr` given to a `string` parameter (E0202), which
 aeb's own sources of v0.335 and older do, so those no longer install on 0.931.0;
-v0.347 does. Verified on 2026-11-22 with ae 0.936.0 and the aeb main of that day, and with ae 0.935.0 on the same day with the same (cachyos, Linux x86_64, xvfb), on 2026-11-21 with ae 0.933.0 and aeb v0.349 (and on
+v0.347 does. Verified on 2026-11-23 with ae 0.939.0 and the aeb main of that day, on 2026-11-22 with ae 0.936.0 and 0.935.0 with the same (cachyos, Linux x86_64, xvfb), on 2026-11-21 with ae 0.933.0 and aeb v0.349 (and on
 2026-11-20 with ae 0.931.0 and aeb v0.347): `./ci.sh` passes on Linux x86_64 (Ubuntu 22.04, xvfb) with no source
 change; the code needed nothing newer than 0.841.0, so the Aether move is
 tracking-only and the aeb move is the needed one. Earlier: 0.841.0 with aeb
